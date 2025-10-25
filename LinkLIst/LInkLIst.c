@@ -29,7 +29,7 @@ typedef Node* LinkList;
 void visit(ElemType c)
 {
 	printf("%d", c);
-	return OK;
+	return OK;//void 为什么会return OK?
 }
 
 Status InitList(LinkList* L)
@@ -46,7 +46,7 @@ Status InitList(LinkList* L)
 Status ListEmpty(LinkList L)
 {
 	if (L->next == NULL)
-		return FALSE;
+		return FALSE;//???你在写什么，为NULL不是说明他为空吗？？？
 	return TURE;
 }
 
@@ -70,7 +70,7 @@ int ListLength(LinkList L)
 	{
 		return 0;
 	}
-	int i = 1;
+	int i = 1;//注意，链式表在计算时有延迟，当计数到最后一个并不会立刻停下，要再过一个才变成NUll，才会停止，因此要i=1
 	LinkList q = L->next;
 	while (q)
 	{
@@ -83,7 +83,7 @@ int ListLength(LinkList L)
 Status GetElem(LinkList L, int i, ElemType* e)
 {
 	LinkList q = L->next;
-	int j = 1;
+	int j = 1;//但这里不会延迟。为什么？因为我不是以NLULL作为标准
 	while (q || j < i)
 	{
 		q = q->next;
@@ -92,14 +92,14 @@ Status GetElem(LinkList L, int i, ElemType* e)
 	*e = q->data;
 	return OK;
 	if (q || j > i)
-		return ERROR;
+		return ERROR;//这里不对，判断应在前面，否则若q为空，那么就变成了野指针
 }
 
 int LocateElem(LinkList L, ElemType e)
 {
 	LinkList q = L->next;
 	int j = 1;
-	while (q)
+	while (q)//这里也一样，要以NULL作为标志的话，应该然j小1
 	{
 		if (q->data == e)
 		{
@@ -127,7 +127,7 @@ Status InsertElem(LinkList* L, int i, ElemType e)
 	return OK;
 	if (q || j > i)
 	{
-		return ERROR;
+		return ERROR;//这里也是，要防止野指针
 	}
 }
 
@@ -135,7 +135,7 @@ Status DeletElem(LinkList* L, int i, ElemType* e)
 {
 	LinkList q = (*L);
 	int j = 1;
-	while (q || j < i)
+	while (q || j < i)//这里应该为q->next，用以判断后续节点是否为空
 	{
 		q = q->next;
 		j++;
@@ -144,7 +144,7 @@ Status DeletElem(LinkList* L, int i, ElemType* e)
 	q->next = d->next;
 	free(d);
 	return OK;
-	if (q || j > i)
+	if (q || j > i)//判断放前面,q改为!(q->next)
 		return ERROR;
 }
 
